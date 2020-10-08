@@ -2,13 +2,23 @@ const Joi = require( 'joi' );
 
 const get_vaccine_info = function get_vaccine_info ( req, res ) {
 
-    const data = { filter, filterOn, sortType, sortOn } = req.query;
+    const { filter, filterOn, sortType, sortOn } = req.query;
 
     // const schema =  Joi.object( {
-    //     filterOn: Joi.string().valid( 'CATEGORY', 'RESEARCHER', 'STAGE' ).optional(),
-    //     filter: Joi.string().when( 'filterOn' ),
+    //     filterOn: Joi.string().valid( 'CATEGORY', 'RESEARCHER', 'STAGE' ).required(),
+    //     filter: Joi.when( 'filterOn', {
+    //         is: Joi.required(),
+    //         then : Joi.string().disallow( '' ).disallow( null )
+    //     } ),
     //     sortOn: Joi.string().valid( 'RESEARCHER', 'NAME', 'STAGE' ).optional(),
-    //     sortType: Joi.string().when( 'sortOn' ).valid( 'ASC', 'DESC' ).default( 'ASC' )
+    //     sortType: Joi.string().disallow( '' ).disallow( null ).when( 'sortOn', {
+    //         is: Joi.string().valid( 'ASC', 'DESC' ).required(),
+    //         then: Joi.string().required()
+    //     } )
+    // } );
+
+    // schema.validate( req.query, ( err ) => { 
+    //     if ( err ) return res.sendStatus( 400 );
     // } );
 
     try {
