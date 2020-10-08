@@ -25,7 +25,7 @@ const get_vaccine_info = async function get_vaccine_info ( req, res ) {
     try {
 
         const file_data = await DataReader.getData();
-
+        console.log(file_data);
         return res.sendStatus( 200 );
 
     } catch( error ) {
