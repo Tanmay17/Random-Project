@@ -1,6 +1,7 @@
 const Joi = require( 'joi' );
+const { Plugin: { DataReader } } = require( '../lib' );
 
-const get_vaccine_info = function get_vaccine_info ( req, res ) {
+const get_vaccine_info = async function get_vaccine_info ( req, res ) {
 
     const { filter, filterOn, sortType, sortOn } = req.query;
 
@@ -22,6 +23,8 @@ const get_vaccine_info = function get_vaccine_info ( req, res ) {
     // } );
 
     try {
+
+        const file_data = await DataReader.getData();
 
         return res.sendStatus( 200 );
 
