@@ -1,17 +1,19 @@
 const Joi = require( 'joi' );
-const { Plugin: { DataReader } } = require( '../lib' );
+const { Plugin: { DataReader } } = require( '../../lib' );
+const { VaccineService } = require( '../../lib/service' );
 
 const get_vaccine_info = async function get_vaccine_info ( req, res ) {
 
-    const { filter, filterOn, sortType, sortOn } = req.query;
+    const { filter, filterOn, sortType, sortOn, page } = req.query;
 
     // const schema =  Joi.object( {
+    //     page: Joi.number(),
     //     filterOn: Joi.string().valid( 'CATEGORY', 'RESEARCHER', 'STAGE' ).required(),
     //     filter: Joi.when( 'filterOn', {
     //         is: Joi.required(),
     //         then : Joi.string().disallow( '' ).disallow( null )
     //     } ),
-    //     sortOn: Joi.string().valid( 'RESEARCHER', 'NAME', 'STAGE' ).optional(),
+    //     sortOn: Joi.string().valid( 'RESEARCHER', 'STAGE' ).optional(), //array
     //     sortType: Joi.string().disallow( '' ).disallow( null ).when( 'sortOn', {
     //         is: Joi.string().valid( 'ASC', 'DESC' ).required(),
     //         then: Joi.string().required()
@@ -22,11 +24,24 @@ const get_vaccine_info = async function get_vaccine_info ( req, res ) {
     //     if ( err ) return res.sendStatus( 400 );
     // } );
 
+    let data;
     try {
 
-        const file_data = await DataReader.getData();
-        console.log(file_data);
-        return res.sendStatus( 200 );
+        data = await DataReader.getData();
+
+        if ( filter && filterOn ){
+
+            data = await VaccineService.filterData( data, filter, filterOn );
+
+        }
+
+        if ( sortType && sortOn ){
+
+            data = await VaccineService.sortData( data, sortType, sortOn );
+
+        }
+
+        return res.send( data ).status( 200 );
 
     } catch( error ) {
 
