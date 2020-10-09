@@ -4,12 +4,12 @@ const { VaccineService } = require( '../../lib/service' );
 
 const get_vaccine_info = async function get_vaccine_info ( req, res ) {
 
-    const { filter, filterOn, sortType, sortOn, page } = req.query;
+    const { search, filterOn, sortType, sortOn, page } = req.query;
 
     // const schema =  Joi.object( {
     //     page: Joi.number(),
     //     filterOn: Joi.string().valid( 'CATEGORY', 'RESEARCHER', 'STAGE' ).required(),
-    //     filter: Joi.when( 'filterOn', {
+    //     search: Joi.when( 'filterOn', {
     //         is: Joi.required(),
     //         then : Joi.string().disallow( '' ).disallow( null )
     //     } ),
@@ -29,15 +29,27 @@ const get_vaccine_info = async function get_vaccine_info ( req, res ) {
 
         data = await DataReader.getData();
 
-        if ( filter && filterOn ){
+        if ( search && filterOn ){
 
-            data = await VaccineService.filterData( data, filter, filterOn );
+            data = await VaccineService.filterData( data, search, filterOn );
+
+            if ( !data ) {
+
+                return res.sendStatus( 422 );
+
+            }
 
         }
 
         if ( sortType && sortOn ){
 
             data = await VaccineService.sortData( data, sortType, sortOn );
+
+            if ( !data ) {
+
+                return res.sendStatus( 422 );
+
+            }
 
         }
 
