@@ -84,8 +84,39 @@ const get_vaccine_info = async function get_vaccine_info ( req, res ) {
     }
 }
 
+const update_vaccine_status = async function update_vaccine_status( req, res ) {
+    
+    try {
+
+        const { file } = req.files;
+        //Joi Check - Pending
+
+        const fileName = file.name;
+        await DataReader.uploadFile( file );
+        const newFileData = await DataReader.getData( '../../store/uploads', fileName );
+
+        if ( !newFileData ) {
+
+            return res.sendStatus( 422 );
+
+        }
+
+        await VaccineService.updateData( fileData, newFileData ); 
+
+        return res.sendStatus( 200 );
+
+    } catch ( error ) {
+
+        console.error( 'POST /vaccine =>', error.message );
+        return res.sendStatus( 500 );
+    
+    }
+
+}
+
 module.exports = {
 
-    get_vaccine_info
+    get_vaccine_info,
+    update_vaccine_status
 
 }
