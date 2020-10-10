@@ -1,4 +1,4 @@
-const Joi = require( 'joi' );
+const { validationResult } = require( 'express-validator' );
 const { Plugin: { DataReader } } = require( '../../lib' );
 const { VaccineService } = require( '../../lib/service' );
 
@@ -14,24 +14,13 @@ try {
 const get_vaccine_info = async function get_vaccine_info ( req, res ) {
 
     const { search, filterOn, sortType, sortOn, page } = req.query;
+    const errors = validationResult( req );
 
-    // const schema =  Joi.object( {
-    //     page: Joi.number(),
-    //     filterOn: Joi.string().valid( 'CATEGORY', 'RESEARCHER', 'STAGE' ).required(),
-    //     search: Joi.when( 'filterOn', {
-    //         is: Joi.required(),
-    //         then : Joi.string().disallow( '' ).disallow( null )
-    //     } ),
-    //     sortOn: Joi.string().valid( 'RESEARCHER', 'STAGE' ).optional(), //array
-    //     sortType: Joi.string().disallow( '' ).disallow( null ).when( 'sortOn', {
-    //         is: Joi.string().valid( 'ASC', 'DESC' ).required(),
-    //         then: Joi.string().required()
-    //     } )
-    // } );
-
-    // schema.validate( req.query, ( err ) => { 
-    //     if ( err ) return res.sendStatus( 400 );
-    // } );
+    if ( !errors.isEmpty() ) {
+        
+        return res.status( 400 ).json( { errors: errors.array() } );
+        
+    }
 
     try {
 
@@ -88,8 +77,13 @@ const update_vaccine_status = async function update_vaccine_status( req, res ) {
     
     try {
 
+        if ( !req.files || !req.files.file ) {
+            
+            return res.sendStatus( 400 );
+
+        }
+
         const { file } = req.files;
-        //Joi Check - Pending
 
         const fileName = file.name;
         await DataReader.uploadFile( file );
