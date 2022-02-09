@@ -1,5 +1,5 @@
 {
-  "name": "biofourmis-assignment",
+  "name": "random-project",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "author": "Tanmay Srivastava",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Tanmay17/biofourmis-assignment/issues"
+    "url": "https://github.com/Tanmay17/random-project/issues"
   },
-  "homepage": "https://github.com/Tanmay17/biofourmis-assignment#readme",
+  "homepage": "https://github.com/Tanmay17/random-project#readme",
   "dependencies": {
     "csv-parser": "^2.3.3",
     "express": "^4.17.1",
